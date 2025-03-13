@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
+import time
 
 
 
@@ -60,7 +61,7 @@ def save_answers(html_content, SAVE_TEST_ANS = True):
         with open("questions_answers.json", "w", encoding="utf-8") as json_file:
             json.dump(questions_answers, json_file, ensure_ascii=False, indent=4)
     
-    return question_answer
+    return questions_answers
 
 
 def attend_course():
@@ -95,9 +96,9 @@ def ace_test(driver, COURSE_ID):
             attempts = driver.find_elements(By.CSS_SELECTOR, "table.quizattemptsummary>tbody>tr")
             print(len(attempts))
         except Exception as e:
-            attempts = 0
+            attempts = []
 
-        if attempts == 0:
+        if len(attempts) == 0:
             empty_attempt(driver=driver)
         else:
             # click first attempt
@@ -106,18 +107,59 @@ def ace_test(driver, COURSE_ID):
 
         # currently in bad attempt page
 
-        question_answers = save_answers(driver.page_source)
+        test_answers = save_answers(driver.page_source)
+
+        driver.get(test_url)
+        start_attempt(driver=driver)
+        for i in range(40):
+            answer_question(driver=driver, questions_answers=test_answers)
+
+
         
 
     else:
         print("No tests")
 
-def empty_attempt(driver):
+
+
+def answer_question(driver, questions_answers):
+        
+        time.sleep(1)
+        # get question text
+        question = driver.find_element(By.CSS_SELECTOR, "div.qtext>p")
+        question = question.text
+        print(question)
+
+        # find text in dictionary and get answer
+        answer = questions_answers[question]
+        print(answer)
+        # click answer
+        ans = driver.find_elements(By.CSS_SELECTOR, "div.answer>div")
+
+        if answer[0] in ans[0].get_attribute("outerHTML"):
+            ansInput = ans[0].find_element(By.CSS_SELECTOR, "input")
+        elif answer[0] in ans[1].get_attribute("outerHTML"):
+            ansInput = ans[1].find_element(By.CSS_SELECTOR, "input")
+        else:
+            ansInput = ans[2].find_element(By.CSS_SELECTOR, "input")
+
+        ansInput.click()
+
+        # click next
+        nextBtn = driver.find_element(By.CSS_SELECTOR, "div.submitbtns input.mod_quiz-next-nav.btn-primary")
+        nextBtn.click()
+
+
+
+def start_attempt(driver):
     button = driver.find_element(By.CSS_SELECTOR, "div.singlebutton button")
     button.click()
 
     button2 = driver.find_element(By.CSS_SELECTOR, "div.moodle-dialogue-bd input.btn-primary")
     button2.click()
+
+def empty_attempt(driver):
+    start_attempt(driver=driver)
 
     # finish test 
 

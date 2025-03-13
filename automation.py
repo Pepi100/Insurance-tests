@@ -8,8 +8,8 @@ import time
 
 from utils import login, ace_test
 
-USERNAME = "ignat"
-PASSWORD = "Provident2@"
+USERNAME = ""
+PASSWORD = ""
 COURSE_ID = 57
 SAVE_TEST_ANS  = True
 
@@ -64,35 +64,10 @@ def take_test():
     button2.click()
 
 
-    def answer_question():
-        # get question text
-        question = driver.find_element(By.CSS_SELECTOR, "div.qtext p.ltr")
-        question = question.text
-        print(question)
-
-        # find text in dictionary and get answer
-        answer = questions_answers[question]
-        print(answer)
-        # click answer
-        ans = driver.find_elements(By.CSS_SELECTOR, "div.answer>div")
-
-        if answer in ans[0].get_attribute("outerHTML"):
-            ansInput = ans[0].find_element(By.CSS_SELECTOR, "input")
-        elif answer in ans[1].get_attribute("outerHTML"):
-            ansInput = ans[1].find_element(By.CSS_SELECTOR, "input")
-        else:
-            ansInput = ans[2].find_element(By.CSS_SELECTOR, "input")
-
-        ansInput.click()
-
-        # click next
-        nextBtn = driver.find_element(By.CSS_SELECTOR, "div.submitbtns input.mod_quiz-next-nav.btn-primary")
-        nextBtn.click()
+    
 
 
-    for i in range(40):
-        answer_question()
-
+    
     
 
 
