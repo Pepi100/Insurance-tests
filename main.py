@@ -71,7 +71,7 @@ def get_answers():
     cmid = quiz_form.find("input", {"name": "cmid"})["value"]
     sesskey = quiz_form.find("input", {"name": "sesskey"})["value"]
 
-    # 3️⃣ Trimite cererea POST pentru a începe testul
+    # 3️ Trimite cererea POST pentru a începe testul
     quiz_start_url = "https://cursuri.agenti-asigurari.ro/mod/quiz/startattempt.php"
     payload = {
         "cmid": cmid,
