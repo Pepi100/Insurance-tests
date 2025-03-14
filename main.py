@@ -12,9 +12,6 @@ def login(LOGIN_URL = LOGIN_URL, USERNAME = USERNAME, PASSWORD = PASSWORD, COURS
     # Inițializează o sesiune pentru a păstra cookie-urile
     session = requests.Session()
 
-
-
-
     # Obține pagina de login
     login_page = session.get(LOGIN_URL)
     soup = BeautifulSoup(login_page.text, "html.parser")

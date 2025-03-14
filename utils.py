@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 import time
+import random
+
 
 
 
@@ -28,7 +30,7 @@ def login(USERNAME, PASSWORD):
 def format_text(text):
     
     # Înlocuiește newline-urile cu un șir gol
-    text =  text.replace('\n', " ").replace('\r', " ").strip()  # .strip() to remove any leading or trailing spaces
+    text = text.replace('\n', "").replace('\r', "").replace(' ', "")  # .strip() to remove any leading or trailing spaces
     return text
 
 
@@ -42,6 +44,7 @@ def save_answers(html_content, SAVE_TEST_ANS = True):
 
     # Găsește toate blocurile de întrebări
     question_blocks = soup.find_all("div", class_="content")
+    print(len(question_blocks))
 
     for question_block in question_blocks:
         if question_block.find("div", class_="formulation clearfix"):
@@ -68,14 +71,12 @@ def attend_course():
     pass
 
 
-def ace_test(driver, COURSE_ID):
+def ace_test(driver, COURSE_ID, Q_TIME):
     
     driver.get(f"https://cursuri.agenti-asigurari.ro/course/view.php?id={COURSE_ID}")
 
     quizzes = driver.find_elements(By.CSS_SELECTOR, "li.activity.quiz.modtype_quiz")
 
-    # get list of quizzes 
-    # print(f"Number of quizzes: {len(quizzes)}")
     next_quiz = None
     for quiz in quizzes:
         try:
@@ -84,7 +85,7 @@ def ace_test(driver, COURSE_ID):
         except Exception as e:
             # attempt to take the test
             next_quiz = quiz
-            break;
+            break
 
     if next_quiz:
         test = next_quiz.find_element(By.CSS_SELECTOR, "span.instancename")
@@ -106,62 +107,92 @@ def ace_test(driver, COURSE_ID):
             anaBtn.click()
 
         # currently in bad attempt page
+        time.sleep(5)
 
         test_answers = save_answers(driver.page_source)
+        print("Rspunsuri")
+        print(len(test_answers))
 
         driver.get(test_url)
         start_attempt(driver=driver)
         for i in range(40):
-            answer_question(driver=driver, questions_answers=test_answers)
+            answer_question(driver=driver, questions_answers=test_answers, Q_TIME=Q_TIME)
 
+        time.sleep(5)
 
-        
+        finBtn = driver.find_elements(By.CSS_SELECTOR, "div.controls div.singlebutton button")
+        driver.execute_script("arguments[0].scrollIntoView();", finBtn[1])
+        # print(len(finBtn))
+        finBtn[1].click()
+
+        time.sleep(2)
+        final = driver.find_element(By.CSS_SELECTOR, "div.confirmation-buttons input.btn-primary")
+        final.click()
+
+    #     go back
+        driver.get(f"https://cursuri.agenti-asigurari.ro/course/view.php?id={COURSE_ID}")
+
 
     else:
         print("No tests")
 
 
 
-def answer_question(driver, questions_answers):
-        
-        time.sleep(1)
-        # get question text
-        question = driver.find_element(By.CSS_SELECTOR, "div.qtext>p")
-        question = question.text
-        print(question)
 
-        # find text in dictionary and get answer
-        answer = questions_answers[question]
-        print(answer)
-        # click answer
-        ans = driver.find_elements(By.CSS_SELECTOR, "div.answer>div")
 
-        if answer[0] in ans[0].get_attribute("outerHTML"):
-            ansInput = ans[0].find_element(By.CSS_SELECTOR, "input")
-        elif answer[0] in ans[1].get_attribute("outerHTML"):
-            ansInput = ans[1].find_element(By.CSS_SELECTOR, "input")
-        else:
-            ansInput = ans[2].find_element(By.CSS_SELECTOR, "input")
+def answer_question(driver, questions_answers, Q_TIME):
+    # wait random ammount of time:
 
-        ansInput.click()
+    random_int = random.randint(0, Q_TIME)
+    time.sleep(random_int)
 
-        # click next
-        nextBtn = driver.find_element(By.CSS_SELECTOR, "div.submitbtns input.mod_quiz-next-nav.btn-primary")
-        nextBtn.click()
+    # get question text
+    question = driver.find_element(By.CSS_SELECTOR, "div.qtext>p")
+    question = format_text(question.text)
+    print(question)
+
+    # find text in dictionary and get answer
+    answer = questions_answers[question]
+    print(answer)
+    # click answer
+    ans = driver.find_elements(By.CSS_SELECTOR, "div.answer>div")
+
+    if answer[0] in format_text(ans[0].text):
+        ansInput = ans[0].find_element(By.CSS_SELECTOR, "input")
+    elif answer[0] in format_text(ans[1].get_attribute("outerHTML")):
+        ansInput = ans[1].find_element(By.CSS_SELECTOR, "input")
+    else:
+        ansInput = ans[2].find_element(By.CSS_SELECTOR, "input")
+
+    ansInput.click()
+
+    # click next
+    nextBtn = driver.find_element(By.CSS_SELECTOR, "div.submitbtns input.mod_quiz-next-nav.btn-primary")
+    nextBtn.click()
 
 
 
 def start_attempt(driver):
     button = driver.find_element(By.CSS_SELECTOR, "div.singlebutton button")
     button.click()
-
-    button2 = driver.find_element(By.CSS_SELECTOR, "div.moodle-dialogue-bd input.btn-primary")
-    button2.click()
+    try:
+        button2 = driver.find_element(By.CSS_SELECTOR, "div.moodle-dialogue-bd input.btn-primary")
+        button2.click()
+    except Exception as e:
+        pass
 
 def empty_attempt(driver):
     start_attempt(driver=driver)
-
     # finish test 
 
     finBtn = driver.find_element(By.CSS_SELECTOR, "div.othernav a.endtestlink")
     finBtn.click()
+
+    finBtn = driver.find_elements(By.CSS_SELECTOR, "div.controls div.singlebutton button")
+    driver.execute_script("arguments[0].scrollIntoView();", finBtn[1])
+    # print(len(finBtn))
+    finBtn[1].click()
+
+    time.sleep(2)
+    final = driver.find_element(By.CSS_SELECTOR, "div.confirmation-buttons input.btn-primary")
+    final.click()
