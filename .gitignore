@@ -1,4 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
+
+questions_answers.json
+
+
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/

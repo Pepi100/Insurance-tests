@@ -1,9 +1,9 @@
-from selenium.webdriver.common.by import By
+
 import time
 from utils import login, ace_test
 
-USERNAME = "enculescu"
-PASSWORD = "Provident2@"
+USERNAME = ""
+PASSWORD = ""
 COURSE_ID = 57
 SAVE_TEST_ANS  = True
 # max time per question in seconds

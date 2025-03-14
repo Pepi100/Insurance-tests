@@ -28,9 +28,8 @@ def login(USERNAME, PASSWORD):
 
 
 def format_text(text):
-    
     # Înlocuiește newline-urile cu un șir gol
-    text = text.replace('\n', "").replace('\r', "").replace(' ', "")  # .strip() to remove any leading or trailing spaces
+    text = text.replace('\n', "").replace('\r', "").replace(' ', "").replace("\xa0", "")  # .strip() to remove any leading or trailing spaces
     return text
 
 
@@ -144,7 +143,7 @@ def answer_question(driver, questions_answers, Q_TIME):
     # wait random ammount of time:
 
     random_int = random.randint(0, Q_TIME)
-    time.sleep(random_int)
+    time.sleep(1 + random_int)
 
     # get question text
     question = driver.find_element(By.CSS_SELECTOR, "div.qtext>p")
