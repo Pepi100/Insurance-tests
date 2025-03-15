@@ -1,6 +1,6 @@
 # RORYSol Insurance
 
-This Python tool automates navigating through the RorySol insurance training platform, completing courses, and passing all necessary tests efficiently. It uses Selenium to interact with the platform, ensuring a smooth and automated experience for users who need to complete their certification requirements
+This Python tool automates navigating through the [RorySol insurance](https://cursuri.agenti-asigurari.ro/) training platform, completing courses, and passing all necessary tests efficiently. It uses Selenium to interact with the platform, ensuring a smooth and automated experience for users who need to complete their certification requirements
 
 ## Features  
 - ✅ Automatic Login
