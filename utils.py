@@ -35,7 +35,6 @@ def format_text(text):
 
 
 def save_answers(html_content, SAVE_TEST_ANS = True):
-
     from collections import defaultdict
     questions_answers = defaultdict(list)
 
@@ -195,3 +194,16 @@ def empty_attempt(driver):
     time.sleep(2)
     final = driver.find_element(By.CSS_SELECTOR, "div.confirmation-buttons input.btn-primary")
     final.click()
+
+
+
+def course_completion(driver, COURSE_ID):
+    driver.get(f"https://cursuri.agenti-asigurari.ro/course/view.php?id={COURSE_ID}")
+
+
+
+#     get all lessons:
+    lessons = driver.find_elements(By.CSS_SELECTOR, "li.activity.lesson.modtype_lesson")
+    print(len(lessons))
+    for l in lessons:
+        print(l.text)

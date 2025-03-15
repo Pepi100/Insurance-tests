@@ -1,6 +1,6 @@
 
 import time
-from utils import login, ace_test
+from utils import login, ace_test, course_completion
 
 USERNAME = ""
 PASSWORD = ""
@@ -16,16 +16,9 @@ Q_TIME = 10
 
 
 driver = login(USERNAME, PASSWORD)
+course_completion(driver, COURSE_ID)
 
-try:
-    ace_test(driver, COURSE_ID=COURSE_ID, Q_TIME=Q_TIME)
-    ace_test(driver, COURSE_ID=COURSE_ID, Q_TIME=Q_TIME)
-    ace_test(driver, COURSE_ID=COURSE_ID, Q_TIME=Q_TIME)
-    ace_test(driver, COURSE_ID=COURSE_ID, Q_TIME=Q_TIME)
-    ace_test(driver, COURSE_ID=COURSE_ID, Q_TIME=Q_TIME)
-except Exception as e:
-    print(e)
-    print("No more tests")
+
 
 
 
