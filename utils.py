@@ -35,7 +35,6 @@ def format_text(text):
 
 
 def save_answers(html_content, SAVE_TEST_ANS = True):
-
     from collections import defaultdict
     questions_answers = defaultdict(list)
 
@@ -228,3 +227,16 @@ def save_test_answers(html_content):
             questions_answers[question_text].append(question_answer)
 
     return questions_answers
+
+
+
+def course_completion(driver, COURSE_ID):
+    driver.get(f"https://cursuri.agenti-asigurari.ro/course/view.php?id={COURSE_ID}")
+
+
+
+#     get all lessons:
+    lessons = driver.find_elements(By.CSS_SELECTOR, "li.activity.lesson.modtype_lesson")
+    print(len(lessons))
+    for l in lessons:
+        print(l.text)
