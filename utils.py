@@ -195,3 +195,36 @@ def empty_attempt(driver):
     time.sleep(2)
     final = driver.find_element(By.CSS_SELECTOR, "div.confirmation-buttons input.btn-primary")
     final.click()
+
+
+def save_test_answers(html_content):
+    from collections import defaultdict
+    questions_answers = defaultdict(list)
+
+    soup = BeautifulSoup(html_content, "html.parser")
+
+    # Găsește toate blocurile de întrebări
+    question_blocks = soup.find_all("div", class_="content")
+    print(len(question_blocks))
+
+    for question_block in question_blocks:
+        if question_block.find("div", class_="formulation clearfix"):
+            # Extrage textul întrebării
+            question_text = (question_block.find("div", class_="formulation clearfix")
+                             .find("div",class_="qtext")
+                             .get_text(strip=True)
+                             .replace("\n", " "))
+            question_answer = (question_block.find("div", class_="rightanswer")
+                               .find("p")
+                               .get_text(strip=True)
+                               .replace("\n", " "))
+
+
+            # readable format
+            # question_text = format_text(question_text)
+            # question_answer = format_text(question_answer)
+
+            # Adaugă întrebarea și răspunsul în dicționar
+            questions_answers[question_text].append(question_answer)
+
+    return questions_answers
