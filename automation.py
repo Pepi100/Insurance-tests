@@ -1,25 +1,27 @@
-
 import time
-from utils import login, ace_test, course_completion
-
-USERNAME = ""
-PASSWORD = ""
-COURSE_ID = 57
-SAVE_TEST_ANS  = True
-# max time per question in seconds
-Q_TIME = 10
+from tkinter import messagebox
+from features import save_answers
+from GUI import create_gui
 
 
-# https://www.youtube.com/watch?v=NB8OceGZGjA
+def start(username, password, course_id):
+    try:
+        course_id = int(course_id)
+    except ValueError:
+        messagebox.showerror("Input Error", "Course ID must be a number")
+        return
+
+    q_time = 10  # Fixed time per question in seconds
+
+    if not username or not password:
+        messagebox.showerror("Input Error", "Username and password cannot be empty")
+        return
+
+    save_answers(username, password, course_id, q_time)
+    messagebox.showinfo("Success", "Answers saved successfully!")
+
+    time.sleep(150)  # Optional delay
 
 
-
-
-driver = login(USERNAME, PASSWORD)
-course_completion(driver, COURSE_ID)
-
-
-
-
-
-time.sleep(150)
+if __name__ == "__main__":
+    create_gui(start)

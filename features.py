@@ -12,14 +12,7 @@ Q_TIME = 2
 
 
 
-
-
-
-
-
-
-
-def save_answers():
+def save_answers(USERNAME, PASSWORD, COURSE_ID, Q_TIME = 5):
     driver = login(USERNAME, PASSWORD)
     driver.get(f"https://cursuri.agenti-asigurari.ro/course/view.php?id={COURSE_ID}")
     quizzes = driver.find_elements(By.CSS_SELECTOR, "li.activity.quiz.modtype_quiz")
@@ -54,7 +47,7 @@ def save_answers():
 
 
 
-save_answers()
+
 
 
 
