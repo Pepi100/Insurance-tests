@@ -4,12 +4,12 @@ from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
 import time
 import random
-
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 
 def login(USERNAME, PASSWORD):
-    service = Service(executable_path="chromedriver.exe")
+    service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service)
     
     driver.get("https://cursuri.agenti-asigurari.ro/login/index.php")
