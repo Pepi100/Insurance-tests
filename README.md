@@ -11,20 +11,23 @@ This Python tool automates navigating through the [RorySol insurance](https://cu
 - 🔧 Speed Dial
 - 💡 Test Correctness dial
 - :brain: Export program as .exe for ease of use
-- GUI
+- :desktop_computer: GUI
 
-## Installation  
+
+
+
+## :floppy_disk: Installation  
 
 To install you only need download the latest .exe version from repo.
 
-## Build
+
+
+## :abacus: Build
 
 To build the application yourself, simply run the following command after installing all dependencies:
 
 ```python
-
-    pyinstaller main.py --onefile --name insurance
-
+pyinstaller main.py --onefile --name insurance
 ```
 
 ## ⚠️ Disclaimer
